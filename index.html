@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GHOST | Hyperspectral Segmentation</title>
-    <meta name="description" content="Generalizable Hyperspectral Observation & Segmentation Toolkit. pip install ghost-hsi">
+    <meta name="description" content="GHOST — an attempt to generalize hyperspectral image segmentation. pip install ghost-hsi">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -15,7 +15,6 @@
     </div>
 
     <div class="top-bar">
-        <a href="docs.html" class="top-btn">Documentation</a>
         <a href="api.html" class="top-btn">API Reference</a>
         <button class="top-btn-icon" id="theme-toggle" aria-label="Toggle appearance">
             <svg id="theme-toggle-dark-icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -36,14 +35,34 @@
             </svg>
             <span>Overview</span>
         </a>
-        <a href="#benchmarks">
+        <a href="#results">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="20" x2="18" y2="10"></line>
                 <line x1="12" y1="20" x2="12" y2="4"></line>
                 <line x1="6" y1="20" x2="6" y2="14"></line>
             </svg>
-            <span>Benchmarks</span>
+            <span>Results</span>
+        </a>
+        <a href="#architecture">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <line x1="12" y1="2" x2="12" y2="6"></line>
+                <line x1="12" y1="18" x2="12" y2="22"></line>
+                <line x1="2" y1="12" x2="6" y2="12"></line>
+                <line x1="18" y1="12" x2="22" y2="12"></line>
+            </svg>
+            <span>Architecture</span>
+        </a>
+        <a href="#why-spectral">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            <span>Why Spectral</span>
         </a>
         <a href="#tutorial">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -53,15 +72,6 @@
             </svg>
             <span>Tutorial</span>
         </a>
-        <a href="#applications">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                <path d="M4.93 4.93a10 10 0 0 0 0 14.14"></path>
-            </svg>
-            <span>Applications</span>
-        </a>
     </nav>
 
     <header>
@@ -69,8 +79,7 @@
             <div class="beta-badge">Beta</div>
             <h1>GHOST</h1>
             <p class="hero-subtitle">Generalizable Hyperspectral Observation &amp; Segmentation Toolkit</p>
-            <p class="hero-tagline">Hyperspectral Intelligence out of the box.</p>
-            <p class="hero-features">No PCA &bull; No fine&#8209;tuning &bull; No augmentation &bull; Data&#8209;agnostic</p>
+            <p class="hero-tagline">An attempt to generalize<br>Hyperspectral Imaging.</p>
             <div class="terminal-window hero-terminal">
                 <div class="terminal-header">
                     <div class="terminal-controls">
@@ -89,132 +98,457 @@
                 <pre><code id="hero-install-code">pip install ghost-hsi
 ghost demo</code></pre>
             </div>
-            <p class="platform-notice">Linux only &nbsp;&middot;&nbsp; Python 3.9–3.12 &nbsp;&middot;&nbsp; <a href="https://pypi.org/project/ghost-hsi/" target="_blank">PyPI</a></p>
+            <p class="platform-notice">Python 3.9 &ndash; 3.12 &nbsp;&middot;&nbsp; <a href="https://pypi.org/project/ghost-hsi/" target="_blank">PyPI</a></p>
+            <!-- GHOST currently supports Python 3.9, 3.10, 3.11, and 3.12.
+                 Python 3.13+ is not yet tested. Older versions are not supported. -->
+            <a class="logs-peek-btn" href="ghost_ip_logs.html" target="_blank" rel="noopener">See what GHOST looks like &rarr;</a>
         </div>
     </header>
 
     <div class="container">
 
-        <section id="benchmarks">
-            <h2 class="section-title reveal">Performance Benchmarks.</h2>
-            <div class="table-container reveal">
-                <table class="benchmark-table">
-                    <thead>
-                        <tr>
-                            <th>Dataset</th>
-                            <th>Config</th>
-                            <th>OA (%)</th>
-                            <th>mIoU</th>
-                            <th>Dice</th>
-                            <th>Kappa</th>
-                            <th>Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="dataset-name">Indian Pines</td>
-                            <td>32 base / 8 filters</td>
-                            <td>97.55</td>
-                            <td>0.8027</td>
-                            <td>0.8391</td>
-                            <td>0.9721</td>
-                            <td>77m</td>
-                        </tr>
-                        <tr>
-                            <td class="dataset-name">Indian Pines</td>
-                            <td>64 base / 32 filters</td>
-                            <td>97.52</td>
-                            <td>0.8593</td>
-                            <td>0.9038</td>
-                            <td>0.9717</td>
-                            <td>6h 2m</td>
-                        </tr>
-                        <tr class="pending-row">
-                            <td class="dataset-name">Salinas Valley</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                        </tr>
-                        <tr class="pending-row">
-                            <td class="dataset-name">Pavia University</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                            <td>—</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="table-note reveal">Tested on an NVIDIA RTX 3050 (6&thinsp;GB VRAM) &nbsp;&middot;&nbsp; <code>--train_ratio 0.2 --val_ratio 0.1 --seed 42</code>, forest routing. Standard benchmark datasets available from the <a href="http://www.ehu.eus/ccwintco/index.php/Hyperspectral_Remote_Sensing_Scenes" target="_blank" style="color:var(--text-secondary); text-decoration:underline;">GIC group at UPV/EHU</a>. Salinas Valley and Pavia University pending re-run.</p>
-        </section>
-
-        <section id="applications">
-            <h2 class="section-title reveal">Field Deployment.</h2>
-            <div class="apps-grid">
-                <div class="app-card reveal">
-                    <div class="app-image">
-                        <img src="assets/images/LUSC_segmentation.png" alt="LUSC Lung Cancer Segmentation" style="object-position: center;">
-                    </div>
-                    <div class="app-info">
-                        <div class="app-badge">Medical Pathology</div>
-                        <h3>Lung Cancer (LUSC).</h3>
-                        <p>Applied to lung squamous cell carcinoma hyperspectral pathology slides. GHOST segments tissue regions across 61 spectral bands — the same binary trained on remote sensing data, zero re-configuration.</p>
-                        <a href="https://github.com/Intelligent-Imaging-Center/HMILungDataset" target="_blank" class="app-link-btn">View Dataset &rarr;</a>
-                    </div>
-                </div>
-                <div class="app-card reveal">
-                    <div class="app-image">
-                        <img src="assets/images/Crism.png" alt="Mars CRISM Mineral Map">
-                    </div>
-                    <div class="app-info">
-                        <div class="app-badge">Remote Sensing</div>
-                        <h3>Mars CRISM.</h3>
-                        <p>Mineralogical mapping of the Martian surface from MRO CRISM data. GHOST identifies phyllosilicates, olivine, and carbonates — revealing the aqueous history of the Red Planet.</p>
-                        <a href="https://science.nasa.gov/resource/crism-exploring-the-geology-of-mars/" target="_blank" class="app-link-btn">Learn More &rarr;</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="architecture-detail">
-            <div class="rssp-container reveal">
-                <div class="rssp-content">
-                    <div class="app-badge">The Core Engine</div>
-                    <h2>RSSP Strategy.</h2>
-                    <p class="rssp-desc">Recursive Spectral Splitting with Parallel Forests builds a dynamic divide-and-conquer hierarchy over your class set. Spectrally similar classes are kept together and handled by specialist ensembles — giving every minority class a dedicated model rather than drowning in a global softmax.</p>
-                    <div class="rssp-features">
-                        <div class="rssp-feature">
-                            <h4>No PCA Required.</h4>
-                            <p>Continuum Removal normalizes away brightness and albedo variations, isolating intrinsic absorption feature shape. All bands preserved — no dimensionality choices, no information discarded.</p>
+        <!-- Generalizability Box -->
+        <section id="generalizability">
+            <div class="gen-box reveal">
+                <h3 class="gen-title">What does "generalizable" actually mean here?</h3>
+                <p class="gen-intro">For a hyperspectral model to work across different scenes without retraining, a few things need to be true. Here's where GHOST currently stands.</p>
+                <div class="gen-checklist">
+                    <div class="gen-item gen-checked">
+                        <span class="gen-icon">&#10003;</span>
+                        <div class="gen-item-text">
+                            <strong>Data Agnostic</strong>
+                            <p>Band count, class count, and spatial dimensions are all read from the file at runtime. Nothing is hardcoded. Same binary on Indian Pines, LUSC, and Mars CRISM.</p>
                         </div>
-                        <div class="rssp-feature">
-                            <h4>Fully Data-Agnostic.</h4>
-                            <p>Band count, class count, spatial dimensions — all read from the file at runtime. Nothing is hardcoded. The same binary handles remote sensing, medical pathology, and planetary science.</p>
+                    </div>
+                    <div class="gen-item gen-checked">
+                        <span class="gen-icon">&#10003;</span>
+                        <div class="gen-item-text">
+                            <strong>Band Count Agnostic</strong>
+                            <p>Works on 3 bands or 400+. Same pipeline, any sensor resolution, no configuration needed.</p>
+                        </div>
+                    </div>
+                    <div class="gen-item gen-checked">
+                        <span class="gen-icon">&#10003;</span>
+                        <div class="gen-item-text">
+                            <strong>Sensor Agnostic</strong>
+                            <p>Remote sensing, medical pathology, planetary science — no format-specific code paths, no domain-specific preprocessing.</p>
+                        </div>
+                    </div>
+                    <div class="gen-item gen-warning">
+                        <span class="gen-icon">&#9888;</span>
+                        <div class="gen-item-text">
+                            <strong>Spectral-Only Context <span class="gen-wip-badge">Still in progress</span></strong>
+                            <p>For true scene-to-scene transfer, the model needs to classify each pixel from its spectrum alone — no spatial context from neighbors. We're not there yet.</p>
                         </div>
                     </div>
                 </div>
-                <div class="rssp-visual">
-                    <div class="shapes-container">
-                        <div class="shape-node level-0"></div>
-                        <div class="shape-node level-1-left"></div>
-                        <div class="shape-node level-1-right"></div>
-                        <div class="shape-node level-2-1"></div>
-                        <div class="shape-node level-2-2"></div>
-                        <div class="shape-node level-2-3"></div>
-                        <div class="shape-node level-2-4"></div>
-                        <div class="particle p1"></div>
-                        <div class="particle p2"></div>
-                        <div class="particle p3"></div>
-                    </div>
+                <div class="gen-footer-note">
+                    <p><strong>v0.1.x currently relies on both spectral and spatial context.</strong> There's a U-Net backbone that looks at neighboring pixels together, which means a model trained on one scene can't be used on another without retraining from scratch.</p>
+                    <p style="margin-top: 10px;">v0.2.x is an attempt to fix this — a problem that hasn't been cleanly solved in the HSI field either, as far as I can tell. <a href="#architecture" class="gen-v2-link" id="goto-v2">More about v0.2.x &rarr;</a></p>
                 </div>
             </div>
         </section>
 
+        <!-- Results Section -->
+        <section id="results">
+            <h2 class="section-title reveal">Results.</h2>
+            <p class="section-subtitle reveal">Tested on standard HSI benchmarks. These numbers are from single-scene pixel-level evaluation, which is the standard for these datasets but doesn't say much about real-world generalization. Expect roughly &plusmn;1% variance between runs due to random splits and seed sensitivity. Take them accordingly.</p>
+
+            <div class="dataset-tabs reveal">
+                <div class="dataset-tab-buttons">
+                    <button class="ds-tab-btn active" data-tab="indian-pines">Indian Pines</button>
+                    <button class="ds-tab-btn" data-tab="pavia">Pavia University</button>
+                    <button class="ds-tab-btn" data-tab="salinas">Salinas Valley</button>
+                    <button class="ds-tab-btn" data-tab="lusc">LUSC</button>
+                    <button class="ds-tab-btn" data-tab="crism">Mars CRISM</button>
+                </div>
+
+                <div class="dataset-tab-content">
+
+                    <!-- Indian Pines -->
+                    <div class="ds-tab-panel active" id="tab-indian-pines">
+                        <div class="ds-layout">
+                            <div class="ds-image-container ds-img-trigger" data-src="assets/images/IndianPines_highfilters.png" title="Click to enlarge">
+                                <img src="assets/images/IndianPines_highfilters.png" alt="Indian Pines Segmentation">
+                            </div>
+                            <div class="ds-info">
+                                <h3>Indian Pines</h3>
+                                <p class="ds-meta">200 bands &nbsp;&middot;&nbsp; 16 classes &nbsp;&middot;&nbsp; Remote Sensing (AVIRIS)</p>
+
+                                <p class="ds-table-label">Metrics</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Config</th><th>OA (%)</th><th>mIoU</th><th>Kappa</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>64 / 16</td><td>98.16</td><td>0.9071</td><td>0.9790</td></tr>
+                                            <tr><td>32 / 8</td><td>97.20</td><td>0.8030</td><td>0.9681</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-table-label">Config</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Base / Num Filters</th><th>GPU</th><th>Time</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>64 / 16</td><td>RTX 3050 (laptop)</td><td>2h 20m</td></tr>
+                                            <tr><td>32 / 8</td><td>RTX 3050 (laptop)</td><td>1h 17m</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-note">Standard pixel-level split — 20% train, 10% val, 70% test, seed 42, forest routing, dice loss. The image shown is the 64/16 run. Both runs use the same scene — evaluation is inflated relative to cross-scene generalization.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pavia University -->
+                    <div class="ds-tab-panel" id="tab-pavia">
+                        <div class="ds-layout">
+                            <div class="ds-image-container ds-img-trigger" data-src="assets/images/pavia_segmentation.png" title="Click to enlarge">
+                                <img src="assets/images/pavia_segmentation.png" alt="Pavia University Segmentation">
+                            </div>
+                            <div class="ds-info">
+                                <h3>Pavia University</h3>
+                                <p class="ds-meta">103 bands &nbsp;&middot;&nbsp; 9 classes &nbsp;&middot;&nbsp; Remote Sensing (ROSIS)</p>
+
+                                <p class="ds-table-label">Metrics</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Config</th><th>OA (%)</th><th>mIoU</th><th>Kappa</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>32 / 8</td><td>97.47</td><td>0.9531</td><td>0.9667</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-table-label">Config</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Base / Num Filters</th><th>GPU</th><th>Time</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>32 / 8</td><td>Kaggle T4</td><td>7h 29m</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-note">Standard pixel-level split, seed 42, forest routing, dice loss. Ran on Kaggle free tier T4.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salinas Valley -->
+                    <div class="ds-tab-panel" id="tab-salinas">
+                        <div class="ds-layout">
+                            <div class="ds-image-container ds-img-trigger" data-src="assets/images/salinas_Segmentation.png" title="Click to enlarge">
+                                <img src="assets/images/salinas_Segmentation.png" alt="Salinas Valley Segmentation">
+                            </div>
+                            <div class="ds-info">
+                                <h3>Salinas Valley</h3>
+                                <p class="ds-meta">204 bands &nbsp;&middot;&nbsp; 16 classes &nbsp;&middot;&nbsp; Remote Sensing (AVIRIS)</p>
+
+                                <p class="ds-table-label">Metrics</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Config</th><th>OA (%)</th><th>mIoU</th><th>Kappa</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>32 / 8</td><td>98.69</td><td>0.9577</td><td>0.9855</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-table-label">Config</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Base / Num Filters</th><th>GPU</th><th>Time</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>32 / 8</td><td>Kaggle T4</td><td>10h 51m</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-note">Standard pixel-level split, seed 42, forest routing, dice loss. Ran on Kaggle free tier T4.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LUSC -->
+                    <div class="ds-tab-panel" id="tab-lusc">
+                        <div class="ds-layout">
+                            <div class="ds-image-container ds-img-trigger" data-src="assets/images/segmentation_forest.png" title="Click to enlarge">
+                                <img src="assets/images/segmentation_forest.png" alt="LUSC Lung Cancer Segmentation">
+                            </div>
+                            <div class="ds-info">
+                                <h3>LUSC (Lung Cancer)</h3>
+                                <p class="ds-meta">61 bands &nbsp;&middot;&nbsp; 3 classes &nbsp;&middot;&nbsp; Medical Histopathology</p>
+
+                                <p class="ds-table-label">Metrics</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Config</th><th>OA (%)</th><th>mIoU</th><th>Kappa</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>32 / 8</td><td>99.42</td><td>0.9263</td><td>0.9876</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-table-label">Config</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Base / Num Filters</th><th>GPU</th><th>Time</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>32 / 8</td><td>RTX 3050 (laptop)</td><td>1h 8m</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-note"><strong>Single tissue result only.</strong> This is from one 512&times;512 crop from a single patient scan — it is not representative of the full LUSC dataset and cannot be compared to published clinical benchmarks. The dataset has 60+ scans; multi-scan evaluation is a v0.2.x goal. Dataset: <a href="https://github.com/Intelligent-Imaging-Center/HMILungDataset" target="_blank" style="color:var(--text-secondary);text-decoration:underline;">HMI Lung Dataset</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mars CRISM -->
+                    <div class="ds-tab-panel" id="tab-crism">
+                        <div class="ds-layout">
+                            <div class="ds-image-container ds-img-trigger" data-src="assets/images/Crism.png" title="Click to enlarge">
+                                <img src="assets/images/Crism.png" alt="Mars CRISM Mineral Mapping">
+                            </div>
+                            <div class="ds-info">
+                                <h3>Mars CRISM</h3>
+                                <p class="ds-meta">~400 bands &nbsp;&middot;&nbsp; Mineral mapping &nbsp;&middot;&nbsp; MRO/CRISM</p>
+
+                                <p class="ds-table-label">Metrics</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Config</th><th>OA (%)</th><th>mIoU</th><th>Kappa</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="pending-row"><td>32 / 8</td><td>71.70</td><td>0.5228</td><td>0.6829</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-table-label">Config</p>
+                                <div class="ds-table-wrap">
+                                    <table class="ds-table">
+                                        <thead>
+                                            <tr><th>Base / Num Filters</th><th>GPU</th><th>Time</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="pending-row"><td>32 / 8</td><td>Kaggle T4</td><td>6h 44m</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <p class="ds-note">Quantitative results pending a clean run. The CRISM ground truth annotations are extremely sparse and noisy — the labels themselves are grainy, which drags down the numbers even when GHOST produces a visually smooth and consistent segmentation. The image shows what GHOST predicted. Annotation quality is a known limitation of this dataset. More details once I have a proper evaluation set up. Dataset: <a href="https://science.nasa.gov/resource/crism-exploring-the-geology-of-mars/" target="_blank" style="color:var(--text-secondary);text-decoration:underline;">NASA MRO/CRISM</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section id="architecture">
+            <h2 class="section-title reveal">Architecture.</h2>
+            <p class="section-subtitle reveal">What's in the current build, and what's being redesigned.</p>
+
+            <div class="arch-version-selector reveal">
+                <button class="arch-version-btn active" data-version="v1" id="v1-btn">v0.1.x &mdash; Current</button>
+                <button class="arch-version-btn" data-version="v2" id="v2-btn">v0.2.x &mdash; Proposed</button>
+            </div>
+
+            <!-- v0.1.x Component Tabs -->
+            <div class="arch-tabs" id="arch-v1">
+                <div class="arch-tab-buttons">
+                    <button class="arch-tab-btn active" data-arch-tab="cr-v1">Continuum Removal</button>
+                    <button class="arch-tab-btn" data-arch-tab="conv3d">3D Conv Stack</button>
+                    <button class="arch-tab-btn" data-arch-tab="se">SE Attention</button>
+                    <button class="arch-tab-btn" data-arch-tab="unet">U-Net</button>
+                    <button class="arch-tab-btn" data-arch-tab="spt-v1">SPT</button>
+                    <button class="arch-tab-btn" data-arch-tab="sssr">SSSR (Experimental)</button>
+                    <button class="arch-tab-btn" data-arch-tab="limits">Limitations</button>
+                </div>
+                <div class="arch-tab-content">
+
+                    <div class="arch-panel active" id="arch-cr-v1">
+                        <span class="arch-badge">Preprocessing</span>
+                        <h3>Continuum Removal (Simplified)</h3>
+                        <p>A straight line is drawn from the first spectral band to the last, and the spectrum is divided by it. This removes the overall reflectance slope caused by illumination angle and atmospheric scatter — the dominant non-chemical variation in raw HSI data.</p>
+                        <p>It's a reasonable starting point. The main limitation is that it doesn't normalize absorption features relative to their local context — a deep absorption dip sitting next to a tall reflectance peak and the same dip next to a short peak can look different in the output, even though the underlying chemistry is identical. Full convex hull continuum removal (planned for v0.2.x) handles this more properly.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-conv3d">
+                        <span class="arch-badge">Feature Extraction</span>
+                        <h3>Spectral 3D Conv Stack</h3>
+                        <p>Three sequential 3D convolutions with a (7, 3, 3) kernel — 7 bands deep spectrally, 3&times;3 spatially. The model learns that nearby spectral bands correlate with each other, and that nearby pixels tend to share materials.</p>
+                        <p>The spatial component is both a strength and a problem. It captures local context, which helps within a single scene. But it also means the model is learning where things tend to be, not just what they look like spectrally. That doesn't transfer between scenes. This is one of the main things being removed in v0.2.x.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-se">
+                        <span class="arch-badge">Attention</span>
+                        <h3>SE Attention Blocks</h3>
+                        <p>Squeeze-and-Excitation blocks learn a per-channel importance weight. A global average pool reduces each feature channel to a scalar, a small two-layer MLP predicts a weight between 0 and 1, and that weight is multiplied back into the channel. The network learns to suppress less useful channels and emphasize the ones that matter for the current input.</p>
+                        <p>Lightweight and effective. No major issues with it — the spirit of per-channel weighting carries into v0.2.x implicitly through the dilated ResNet encoder.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-unet">
+                        <span class="arch-badge">Spatial Context</span>
+                        <h3>U-Net Encoder–Decoder</h3>
+                        <p>A standard 4-level U-Net with skip connections. The encoder downsamples through MaxPool2d, the decoder upsamples via transposed convolutions, and skip connections link matching levels. Channel progression: f &rarr; 2f &rarr; 4f &rarr; 8f &rarr; 16f.</p>
+                        <p>This is where most of the learning happens in v0.1.x — and also why the model doesn't generalize across scenes. The U-Net effectively learns "where things are" in the training image. Corn fields tend to appear in certain shapes, urban structures have spatial patterns. None of that is true in the next scene. That's the thing I'm trying to remove entirely in v0.2.x.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-spt-v1">
+                        <span class="arch-badge">Core Engine</span>
+                        <h3>Spectral Partition Tree (SPT)</h3>
+                        <p>Previously called RSSP (Recursive Spectral Splitting with Parallel Forests), SPT is a divide-and-conquer strategy over the class set. It builds a binary tree where classes are recursively split based on SAM (Spectral Angle Mapper) distance — spectrally similar classes are grouped together and handled by specialist ensemble models.</p>
+                        <p>The reasoning: asking one flat model to separate 16 highly imbalanced classes is hard. SPT lets one model split broad groups (vegetation vs. minerals), then separate specialists handle the hard within-group cases (corn subtypes, mineral variants). Each leaf ensemble focuses on a smaller, more tractable problem. In practice this helps a lot with class imbalance.</p>
+                        <p>The SPT logic is unchanged in v0.2.x — only what lives inside each tree node changes.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-sssr">
+                        <span class="arch-badge arch-badge-warn">&#9888; Broken</span>
+                        <h3>SSSR Router (Experimental)</h3>
+                        <p>SSSR (Spectral State-Space Router) was an attempt to replace hard argmax routing between tree nodes with a learned spectral state-space model — differentiable, soft routing probabilities instead of hard decisions at each branch.</p>
+                        <p>In practice it doesn't work. Ensemble routing (<code>--routing forest</code>) outperforms it in every configuration I've tested. The SSM pretraining adds significant wall-clock time, and the routing improvement simply doesn't materialize. The code is currently broken and not recommended.</p>
+                        <p>It may be revisited in v0.1.7+ or rethought entirely for v0.2.x. For now, always use <code>--routing forest</code> and set <code>--ssm_epochs 1</code> to skip SSM pretraining entirely.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-limits">
+                        <span class="arch-badge">v0.1.x</span>
+                        <h3>Known Limitations</h3>
+                        <ul class="arch-list">
+                            <li><strong>File format:</strong> v0.1.6 and below only support <code>.mat</code> files. ENVI, GeoTIFF, and HDF5 require manual conversion first.</li>
+                            <li><strong>Spatial dependence:</strong> The U-Net backbone processes neighboring pixels together. A model trained on one scene cannot reliably segment a different scene — it has learned spatial patterns alongside spectral ones.</li>
+                            <li><strong>No transfer learning:</strong> Each new dataset requires a full training run from scratch. There's no way to reuse weights from a previous run in any meaningful way.</li>
+                            <li><strong>Single scene only:</strong> Training and inference must be on the same scene, or at very minimum the same sensor under near-identical conditions.</li>
+                            <li><strong>SSSR router is broken:</strong> Use <code>--routing forest</code>. See above.</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- v0.2.x Component Tabs -->
+            <div class="arch-tabs" id="arch-v2" style="display:none;">
+                <div class="arch-tab-buttons">
+                    <button class="arch-tab-btn active" data-arch-tab="cr-v2">Continuum Removal</button>
+                    <button class="arch-tab-btn" data-arch-tab="resnet1d">1D Dilated ResNet</button>
+                    <button class="arch-tab-btn" data-arch-tab="mlphead">MLP Head</button>
+                    <button class="arch-tab-btn" data-arch-tab="spt-v2">SPT</button>
+                    <button class="arch-tab-btn" data-arch-tab="crf">Dense CRF</button>
+                    <button class="arch-tab-btn" data-arch-tab="ssl">SSL (Future)</button>
+                    <button class="arch-tab-btn" data-arch-tab="goals">Goals</button>
+                </div>
+                <div class="arch-tab-content">
+
+                    <div class="arch-panel active" id="arch-cr-v2">
+                        <span class="arch-badge">Preprocessing</span>
+                        <h3>Full Convex Hull Continuum Removal</h3>
+                        <p>v0.2.x computes the upper convex hull of each pixel's spectrum — a ceiling that touches all the local reflectance peaks. Dividing the raw spectrum by this hull normalizes every absorption feature relative to its local context. Values at 1.0 mean no absorption at that wavelength; values below 1.0 represent absorption depth directly.</p>
+                        <p>This is the physically correct approach. The dip position encodes which molecular bonds are present, the depth encodes concentration, and the width encodes the type of transition. Two spectra of the same material should look nearly identical after this normalization, regardless of illumination or atmospheric conditions, because the underlying chemistry is the same.</p>
+                        <p>Implementation uses Andrew's monotone chain algorithm (O(n), upper hull only) with Savitzky-Golay smoothing applied before hull computation to stop noise spikes from becoming false hull vertices. The raw spectrum — not the smoothed one — is divided by the hull, which preserves narrow real features in the output.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-resnet1d">
+                        <span class="arch-badge">Spectral Encoder</span>
+                        <h3>1D Dilated ResNet Encoder</h3>
+                        <p>The core change in v0.2.x: each pixel's spectrum is processed independently by a 1D dilated residual network. There are no 2D or 3D convolutions anywhere. No neighboring pixels. No spatial context. The encoder receives one spectrum and outputs a fixed-size embedding representing its spectral fingerprint.</p>
+                        <p>Dilated convolutions with increasing dilation rates (1, 2, 4, 8, 16...) give the encoder a wide receptive field across the spectral axis without any downsampling, allowing it to see both narrow absorption features and broad spectral shapes simultaneously. The architecture auto-adapts its depth and kernel size to the input band count at construction time — no manual configuration needed for different sensors.</p>
+                        <p>Global average pooling at the end collapses the spectral dimension to a fixed-length vector. The MLP head classifies from this vector. That's the entire model from input to output — no spatial operations anywhere in the chain.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-mlphead">
+                        <span class="arch-badge">Classifier</span>
+                        <h3>MLP Classification Head</h3>
+                        <p>A small two-layer MLP on top of the encoder: Linear &rarr; BatchNorm &rarr; ReLU &rarr; Dropout &rarr; Linear. The non-linear hidden layer helps when the spectral embedding isn't perfectly linearly separable for very similar classes — two vegetation subtypes with nearly identical spectral fingerprints, for instance.</p>
+                        <p>Each SPT node trains its own independent encoder + head pair, and each ensemble member at a node uses a different random initialization. Fully independent models, not a shared encoder with different heads. This matters for ensemble diversity — shared encoders collapse toward the same solution regardless of head initialization.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-spt-v2">
+                        <span class="arch-badge">Unchanged</span>
+                        <h3>Spectral Partition Tree (SPT)</h3>
+                        <p>The SPT logic from v0.1.x carries over unchanged. SAM-based class clustering, recursive binary splitting, per-node ensemble training, soft cascade inference — all identical. The only difference is what lives inside each node: a 1D ResNet + MLP instead of 3D Conv + U-Net.</p>
+                        <p>The SPT is the part of GHOST I'm most confident about. Splitting a hard multi-class problem into a hierarchy of simpler problems, with specialists for each group, seems to work well regardless of the backbone. It's a clean structural idea that I think will survive into whatever version comes after v0.2.x.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-crf">
+                        <span class="arch-badge">Optional</span>
+                        <h3>Dense CRF Post-Processing</h3>
+                        <p>After the per-pixel spectral classification, an optional dense CRF pass can smooth the output probability map spatially. The CRF balances two signals: the spectral model's class probabilities (unary potential) and the spatial and spectral similarity between neighboring pixels (pairwise potential). Confident predictions stay mostly unchanged; uncertain pixels near boundaries are nudged toward their neighbors.</p>
+                        <p>This is the <em>only</em> place spatial information enters v0.2.x, and it operates on the output probabilities, not the learned features. The model's classification decisions are 100% spectral — the CRF just cleans salt-and-pepper noise from uncertain pixels. Off by default. Probably helpful for remote sensing data with large homogeneous regions; probably wrong for medical imaging where cellular-level heterogeneity is real.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-ssl">
+                        <span class="arch-badge">Future</span>
+                        <h3>Self-Supervised Learning (SSL)</h3>
+                        <p>One chronic problem in hyperspectral imaging is labeling cost. Annotating every pixel in a scene requires domain expertise, and even expert annotations tend to be noisy and incomplete. Most benchmark datasets have only a few hundred labeled pixels across tens of thousands.</p>
+                        <p>SSL is an attempt to pretrain the spectral encoder on large amounts of unlabeled HSI data using masked spectral modeling — hiding some spectral bands and asking the model to predict them, similar in spirit to BERT-style pretraining for text. The goal is an encoder that already understands spectral chemistry from unlabeled data and needs only a small number of labeled examples to adapt to a new scene or domain.</p>
+                        <p>This is deferred to after v0.2.0. It requires a reasonable collection of diverse unlabeled HSI data and careful evaluation to know if the pretraining is actually learning chemistry or just memorizing sensor response patterns. It's on the radar, just not in the current build.</p>
+                    </div>
+
+                    <div class="arch-panel" id="arch-goals">
+                        <span class="arch-badge">Roadmap</span>
+                        <h3>What v0.2.0 Is Actually Trying to Do</h3>
+                        <p>Being honest about scope: v0.2.0 is not claiming to solve HSI generalization. It's one attempt at a specific subset of it.</p>
+                        <ul class="arch-list arch-goals-list">
+                            <li>
+                                <strong>Spectral-only classification</strong>
+                                <span class="arch-goal-desc">Every pixel classified from its spectrum alone, with no access to neighboring pixels. If it works, the model has learned material chemistry — and chemistry is the same whether the vegetation is in Indiana or Vietnam.</span>
+                            </li>
+                            <li>
+                                <strong>Multiple file formats</strong>
+                                <span class="arch-goal-desc">ENVI (.hdr), GeoTIFF (.tif), HDF5 (.h5) in addition to .mat. Auto-detected by extension. No manual conversion step.</span>
+                            </li>
+                            <li>
+                                <strong>Multi-scene training and inference</strong>
+                                <span class="arch-goal-desc">Train on 2 scenes, run inference on 10 more. The actual test of generalization: if the spectral-only approach works, the model should segment unseen scenes from the same sensor without any retraining.</span>
+                            </li>
+                            <li>
+                                <strong>Same binary, different domains</strong>
+                                <span class="arch-goal-desc">Remote sensing and medical imaging on the same codebase, zero configuration changes between them. Retrain on new data, but change nothing else.</span>
+                            </li>
+                        </ul>
+                        <p class="arch-goals-note">What v0.2.0 won't claim: cross-sensor transfer (different instruments measuring the same materials) or zero-shot generalization (train on crops, segment minerals without retraining). Those are harder problems that likely require SSL and sensor response function handling. They're deferred.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Spectral Context -->
+        <section id="why-spectral">
+            <h2 class="section-title reveal">Why spectral context?</h2>
+            <div class="why-spectral-block reveal">
+                <p>There's a persistent problem in hyperspectral imaging that I don't see talked about much directly: <strong>a model trained on one scene generally can't be used on another.</strong></p>
+                <p>You train on Indian Pines and get 97% accuracy. You run the same model on Salinas Valley and it falls apart — not because the materials are different (both scenes have vegetation, bare soil, crops), but because the model learned <em>where</em> things tend to be, not <em>what</em> they are spectrally.</p>
+                <p>Current HSI methods, including v0.1.x of this project, rely heavily on spatial context. A U-Net learns that "pixels in this area tend to be corn because they're spatially clustered with other corn pixels." That pattern holds within one scene. It means nothing in the next.</p>
+                <p>What should generalize is the chemistry. Chlorophyll absorbs light at around 680 nm because of its molecular structure — that's true whether you're looking at a corn field in Indiana or a rice paddy in Vietnam. Hemoglobin absorbs differently from collagen, regardless of which patient, which hospital, which staining protocol. Spectral fingerprints are determined by molecular bonds, and molecular bonds don't change between scenes.</p>
+                <p>If a model learned to classify from spectral evidence alone — no location, no neighbors — you could train it on two scenes and use it on fifty more. That's the goal of v0.2.x: remove all spatial context from the classification loop and force the model to rely entirely on the spectrum of each individual pixel.</p>
+                <p>I want to be upfront that this is an experiment. Whether the spectral-only approach delivers on that promise is something that needs to be demonstrated, not just argued. The v0.2.x evaluation on multi-scene datasets is what will actually tell us. But the reasoning seems sound, and it's worth trying — especially since I haven't found a clean, accessible implementation of this idea elsewhere in the literature.</p>
+            </div>
+        </section>
+
+        <!-- Tutorial Section -->
         <section id="tutorial">
             <h2 class="section-title reveal">Start here.</h2>
             <div class="tutorial-stepper">
@@ -246,7 +580,7 @@ ghost demo</code></pre>
                 <div class="step-card reveal">
                     <div class="step-number-circle">2</div>
                     <h3>Train.</h3>
-                    <p>Run the full GHOST pipeline. Use the paths printed by <code>ghost demo</code>.</p>
+                    <p>Run the full GHOST pipeline with SPT. Use the paths printed by <code>ghost demo</code>.</p>
                     <div class="terminal-window">
                         <div class="terminal-header">
                             <div class="terminal-controls">
@@ -262,12 +596,12 @@ ghost demo</code></pre>
                                 <span>Copy</span>
                             </button>
                         </div>
-                        <pre><code id="step-2-code">ghost train_rssp \
+                        <pre><code id="step-2-code">ghost train_spt \
   --data /path/to/Indian_pines_corrected.mat \
   --gt   /path/to/Indian_pines_gt.mat \
   --loss dice --routing forest \
   --base_filters 32 --num_filters 8 \
-  --forests 5 --leaf_forests 3 \
+  --ensembles 5 --leaf_ensembles 3 \
   --epochs 400 --patience 50 --min_epochs 40 \
   --out-dir runs/my_experiment</code></pre>
                     </div>
@@ -295,7 +629,7 @@ ghost demo</code></pre>
                         <pre><code id="step-3-code">ghost predict \
   --data  /path/to/Indian_pines_corrected.mat \
   --gt    /path/to/Indian_pines_gt.mat \
-  --model runs/my_experiment/rssp_models.pkl \
+  --model runs/my_experiment/spt_models.pkl \
   --routing forest --out-dir runs/my_experiment</code></pre>
                     </div>
                 </div>
@@ -322,7 +656,7 @@ ghost demo</code></pre>
                         <pre><code id="step-4-code">ghost visualize \
   --data    /path/to/Indian_pines_corrected.mat \
   --gt      /path/to/Indian_pines_gt.mat \
-  --model   runs/my_experiment/rssp_models.pkl \
+  --model   runs/my_experiment/spt_models.pkl \
   --dataset indian_pines --routing forest \
   --out-dir runs/my_experiment</code></pre>
                     </div>
@@ -343,11 +677,14 @@ ghost demo</code></pre>
                     <a href="https://github.com/AnakinSkywalker0" target="_blank">AnakinSkywalker0</a>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>Copyright &copy; 2026 GHOST Team &mdash; Proprietary. All Rights Reserved.</p>
-            </div>
         </div>
     </footer>
+
+    <!-- Lightbox overlay -->
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+        <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
 
     <script src="script.js"></script>
 </body>

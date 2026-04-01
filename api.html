@@ -13,7 +13,6 @@
 
     <div class="top-bar">
         <a href="index.html" class="top-btn">&#8592; Home</a>
-        <a href="docs.html" class="top-btn">Documentation</a>
         <button class="top-btn-icon" id="theme-toggle" aria-label="Toggle appearance">
             <svg id="theme-toggle-dark-icon" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
@@ -24,7 +23,6 @@
         </button>
     </div>
 
-    <!-- Left TOC Sidebar -->
     <nav>
         <a href="index.html">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -44,7 +42,7 @@
             </svg>
             <span>Commands</span>
         </a>
-        <a href="#train-rssp" data-toc="train-rssp">
+        <a href="#train-spt" data-toc="train-spt">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                 stroke-linecap="round" stroke-linejoin="round">
                 <line x1="4" y1="9" x2="20" y2="9"></line>
@@ -52,7 +50,7 @@
                 <line x1="10" y1="3" x2="8" y2="21"></line>
                 <line x1="16" y1="3" x2="14" y2="21"></line>
             </svg>
-            <span>train_rssp</span>
+            <span>train_spt</span>
         </a>
         <a href="#train" data-toc="train">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -114,28 +112,29 @@
                             <tr><th>Command</th><th>Description</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td><code>ghost train_rssp</code></td><td>Full GHOST pipeline — tree + forests + routing</td></tr>
-                            <tr><td><code>ghost train</code></td><td>Flat model training, no RSSP tree (baseline)</td></tr>
+                            <tr><td><code>ghost train_spt</code></td><td>Full GHOST pipeline — Spectral Partition Tree + ensemble models</td></tr>
+                            <tr><td><code>ghost train</code></td><td>Flat model training, no SPT tree (baseline)</td></tr>
                             <tr><td><code>ghost predict</code></td><td>Inference on test split, compute metrics</td></tr>
                             <tr><td><code>ghost visualize</code></td><td>Generate 3-panel segmentation figure</td></tr>
-                            <tr><td><code>ghost demo</code></td><td>Print bundled Indian Pines file paths</td></tr>
+                            <tr><td><code>ghost demo</code></td><td>Print bundled Indian Pines file paths and example command</td></tr>
                             <tr><td><code>ghost version</code></td><td>Print installed version</td></tr>
+                            <tr><td><code>ghost flower</code></td><td>Easter egg</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- ghost train_rssp -->
-            <div class="docs-card" id="train-rssp" data-section="train-rssp">
-                <h2>ghost train_rssp</h2>
-                <p>Primary training command. Builds the RSSP tree, trains per-node forest ensembles.</p>
+            <!-- ghost train_spt -->
+            <div class="docs-card" id="train-spt" data-section="train-spt">
+                <h2>ghost train_spt</h2>
+                <p>Primary training command. Builds the Spectral Partition Tree and trains per-node ensemble models.</p>
                 <div class="terminal-window" style="margin: 24px 0;">
                     <div class="terminal-header">
                         <div class="terminal-controls">
                             <span class="terminal-prompt">$</span>
                             <span class="terminal-title">Terminal</span>
                         </div>
-                        <button class="terminal-copy-btn" data-copy-target="api-train-rssp-example">
+                        <button class="terminal-copy-btn" data-copy-target="api-train-spt-example">
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -144,12 +143,12 @@
                             <span>Copy</span>
                         </button>
                     </div>
-                    <pre><code id="api-train-rssp-example">ghost train_rssp \
+                    <pre><code id="api-train-spt-example">ghost train_spt \
   --data /path/to/data.mat \
   --gt   /path/to/labels.mat \
   --loss dice --routing forest \
   --base_filters 32 --num_filters 8 \
-  --forests 5 --leaf_forests 3 \
+  --ensembles 5 --leaf_ensembles 3 \
   --epochs 400 --patience 50 --min_epochs 40 \
   --out-dir runs/my_experiment</code></pre>
                 </div>
@@ -181,7 +180,7 @@
                     <table class="api-table">
                         <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
                         <tbody>
-                            <tr><td><code>--base_filters</code></td><td><code>32</code></td><td>U-Net base filters. Channel progression: f → 2f → 4f → 8f → 16f</td></tr>
+                            <tr><td><code>--base_filters</code></td><td><code>32</code></td><td>U-Net base filters. Channel progression: f &rarr; 2f &rarr; 4f &rarr; 8f &rarr; 16f</td></tr>
                             <tr><td><code>--num_filters</code></td><td><code>8</code></td><td>Spectral 3D conv filters per layer</td></tr>
                             <tr><td><code>--num_blocks</code></td><td><code>3</code></td><td>Number of 3D conv blocks</td></tr>
                         </tbody>
@@ -206,14 +205,14 @@
                     </table>
                 </div>
 
-                <h3 class="flag-group-title">RSSP Tree</h3>
+                <h3 class="flag-group-title">SPT (Spectral Partition Tree)</h3>
                 <div class="api-table-wrapper">
                     <table class="api-table">
                         <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
                         <tbody>
                             <tr><td><code>--depth</code></td><td><code>auto</code></td><td>Tree depth. <code>auto</code>: stops at depth 3 or SAM &lt; 0.05. <code>full</code>: always recurse. Integer: fixed max depth</td></tr>
-                            <tr><td><code>--forests</code></td><td><code>5</code></td><td>Forest ensemble size per internal node</td></tr>
-                            <tr><td><code>--leaf_forests</code></td><td><code>3</code></td><td>Forest ensemble size per leaf node (≤2 classes)</td></tr>
+                            <tr><td><code>--ensembles</code></td><td><code>5</code></td><td>Ensemble size per internal node</td></tr>
+                            <tr><td><code>--leaf_ensembles</code></td><td><code>3</code></td><td>Ensemble size per leaf node (&le;2 classes)</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -223,10 +222,10 @@
                     <table class="api-table">
                         <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
                         <tbody>
-                            <tr><td><code>--routing</code></td><td><code>hybrid</code></td><td>Routing mode: <code>forest</code> (recommended), <code>hybrid</code>, <code>soft</code></td></tr>
-                            <tr><td><code>--d_model</code></td><td><code>64</code></td><td>SSM fingerprint dimensionality</td></tr>
-                            <tr><td><code>--d_state</code></td><td><code>16</code></td><td>SSM filters per branch</td></tr>
-                            <tr><td><code>--ssm_epochs</code></td><td><code>300</code></td><td>SSM pretraining epochs. Set to <code>1</code> when using <code>--routing forest</code></td></tr>
+                            <tr><td><code>--routing</code></td><td><code>forest</code></td><td>Routing mode: <code>forest</code> (recommended), <code>hybrid</code>, <code>soft</code>. Note: <code>hybrid</code> and <code>soft</code> require the SSSR module which is currently broken — use <code>forest</code></td></tr>
+                            <tr><td><code>--d_model</code></td><td><code>64</code></td><td>SSM fingerprint dimensionality (SSSR only)</td></tr>
+                            <tr><td><code>--d_state</code></td><td><code>16</code></td><td>SSM filters per branch (SSSR only)</td></tr>
+                            <tr><td><code>--ssm_epochs</code></td><td><code>300</code></td><td>SSM pretraining epochs. Set to <code>1</code> when using <code>--routing forest</code> to skip</td></tr>
                             <tr><td><code>--ssm_lr</code></td><td><code>1e-3</code></td><td>SSM pretraining learning rate</td></tr>
                             <tr><td><code>--ssm_save</code></td><td><code>ssm_pretrained.pt</code></td><td>SSM weights save path (inside <code>--out-dir</code>)</td></tr>
                             <tr><td><code>--ssm_load</code></td><td><code>None</code></td><td>Load pre-existing SSM weights, skip pretraining</td></tr>
@@ -240,7 +239,7 @@
                         <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
                         <tbody>
                             <tr><td><code>--out-dir</code></td><td><code>.</code></td><td>Output directory (created if needed)</td></tr>
-                            <tr><td><code>--save</code></td><td><code>rssp_models.pkl</code></td><td>Model bundle filename</td></tr>
+                            <tr><td><code>--save</code></td><td><code>spt_models.pkl</code></td><td>Model bundle filename</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -250,7 +249,7 @@
                     <table class="api-table">
                         <thead><tr><th>File</th><th>Description</th></tr></thead>
                         <tbody>
-                            <tr><td><code>rssp_models.pkl</code></td><td>Complete model bundle: tree + all forests + SSM state</td></tr>
+                            <tr><td><code>spt_models.pkl</code></td><td>Complete model bundle: SPT tree structure + all ensemble model weights + SSM state</td></tr>
                             <tr><td><code>ssm_pretrained.pt</code></td><td>Standalone SSM encoder weights</td></tr>
                             <tr><td><code>training_history.csv</code></td><td>Epoch-by-epoch metrics for all nodes</td></tr>
                         </tbody>
@@ -261,8 +260,8 @@
             <!-- ghost train -->
             <div class="docs-card" id="train" data-section="train">
                 <h2>ghost train</h2>
-                <p>Flat model training — no RSSP tree. Useful as a baseline to compare against the full pipeline.</p>
-                <p>Accepts the same flags as <code>ghost train_rssp</code> for: <code>--data</code>, <code>--gt</code>, <code>--train_ratio</code>, <code>--val_ratio</code>, <code>--base_filters</code>, <code>--num_filters</code>, <code>--num_blocks</code>, <code>--epochs</code>, <code>--lr</code>, <code>--seed</code>, <code>--out-dir</code>, <code>--save</code>.</p>
+                <p>Flat model training — no SPT tree. Useful as a baseline to compare against the full pipeline, or for datasets with very few classes where the tree structure adds no benefit.</p>
+                <p>Accepts the same flags as <code>ghost train_spt</code> for: <code>--data</code>, <code>--gt</code>, <code>--train_ratio</code>, <code>--val_ratio</code>, <code>--base_filters</code>, <code>--num_filters</code>, <code>--num_blocks</code>, <code>--epochs</code>, <code>--lr</code>, <code>--seed</code>, <code>--out-dir</code>, <code>--save</code>.</p>
 
                 <h3 class="flag-group-title">Additional Flags</h3>
                 <div class="api-table-wrapper">
@@ -281,7 +280,7 @@
                         <thead><tr><th>File</th><th>Description</th></tr></thead>
                         <tbody>
                             <tr><td><code>best_model.pth</code></td><td>Best model weights (by val mIoU)</td></tr>
-                            <tr><td><code>training_log.csv</code></td><td>epoch, train_loss, val_loss, val_oa, val_miou, …</td></tr>
+                            <tr><td><code>training_log.csv</code></td><td>epoch, train_loss, val_loss, val_oa, val_miou, &hellip;</td></tr>
                             <tr><td><code>test_results.csv</code></td><td>Final test metrics</td></tr>
                         </tbody>
                     </table>
@@ -310,7 +309,7 @@
                     <pre><code id="api-predict-example">ghost predict \
   --data  /path/to/data.mat \
   --gt    /path/to/labels.mat \
-  --model runs/my_experiment/rssp_models.pkl \
+  --model runs/my_experiment/spt_models.pkl \
   --routing forest --out-dir runs/my_experiment</code></pre>
                 </div>
 
@@ -321,7 +320,7 @@
                         <tbody>
                             <tr><td><code>--data</code></td><td>Hyperspectral data <code>.mat</code> file</td></tr>
                             <tr><td><code>--gt</code></td><td>Ground truth <code>.mat</code> file</td></tr>
-                            <tr><td><code>--model</code></td><td>Path to <code>rssp_models.pkl</code> from <code>ghost train_rssp</code></td></tr>
+                            <tr><td><code>--model</code></td><td>Path to <code>spt_models.pkl</code> from <code>ghost train_spt</code></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -331,7 +330,7 @@
                     <table class="api-table">
                         <thead><tr><th>Flag</th><th>Default</th><th>Description</th></tr></thead>
                         <tbody>
-                            <tr><td><code>--routing</code></td><td><code>all</code></td><td><code>forest</code>, <code>hybrid</code>, <code>soft</code>, or <code>all</code> (runs all three)</td></tr>
+                            <tr><td><code>--routing</code></td><td><code>all</code></td><td><code>forest</code>, <code>hybrid</code>, <code>soft</code>, or <code>all</code> (runs all three). Use <code>forest</code> — others require SSSR which is currently broken</td></tr>
                             <tr><td><code>--ssm_load</code></td><td><code>None</code></td><td>Standalone SSM weights. Falls back to embedded state in pkl</td></tr>
                             <tr><td><code>--train_ratio</code></td><td><code>0.2</code></td><td>Must match training value</td></tr>
                             <tr><td><code>--val_ratio</code></td><td><code>0.1</code></td><td>Must match training value</td></tr>
@@ -376,7 +375,7 @@
                     <pre><code id="api-visualize-example">ghost visualize \
   --data    /path/to/data.mat \
   --gt      /path/to/labels.mat \
-  --model   runs/my_experiment/rssp_models.pkl \
+  --model   runs/my_experiment/spt_models.pkl \
   --dataset indian_pines --routing forest \
   --title   "GHOST — Indian Pines" \
   --out-dir runs/my_experiment</code></pre>
@@ -389,7 +388,7 @@
                         <tbody>
                             <tr><td><code>--data</code></td><td>Hyperspectral data <code>.mat</code> file</td></tr>
                             <tr><td><code>--gt</code></td><td>Ground truth <code>.mat</code> file</td></tr>
-                            <tr><td><code>--model</code></td><td>Path to <code>rssp_models.pkl</code></td></tr>
+                            <tr><td><code>--model</code></td><td>Path to <code>spt_models.pkl</code></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -401,9 +400,9 @@
                         <tbody>
                             <tr><td><code>--routing</code></td><td><code>forest</code></td><td>Routing mode for the prediction panel</td></tr>
                             <tr><td><code>--dataset</code></td><td><code>None</code></td><td>Dataset name for class labels: <code>indian_pines</code>, <code>pavia</code>, <code>salinas</code></td></tr>
-                            <tr><td><code>--r_band</code></td><td>Bands×0.75</td><td>Band index for red channel in false colour</td></tr>
-                            <tr><td><code>--g_band</code></td><td>Bands×0.50</td><td>Band index for green channel</td></tr>
-                            <tr><td><code>--b_band</code></td><td>Bands×0.25</td><td>Band index for blue channel</td></tr>
+                            <tr><td><code>--r_band</code></td><td>Bands&times;0.75</td><td>Band index for red channel in false colour</td></tr>
+                            <tr><td><code>--g_band</code></td><td>Bands&times;0.50</td><td>Band index for green channel</td></tr>
+                            <tr><td><code>--b_band</code></td><td>Bands&times;0.25</td><td>Band index for blue channel</td></tr>
                             <tr><td><code>--title</code></td><td><code>GHOST Segmentation</code></td><td>Figure title</td></tr>
                             <tr><td><code>--ssm_load</code></td><td><code>None</code></td><td>Standalone SSM weights</td></tr>
                             <tr><td><code>--train_ratio</code></td><td><code>0.2</code></td><td>Must match training value</td></tr>
@@ -428,7 +427,7 @@
             <!-- Data Format -->
             <div class="docs-card" id="data-format" data-section="data-format">
                 <h2>Data Format</h2>
-                <p>GHOST accepts <code>.mat</code> files (MATLAB / HDF5 format). Keys inside the file are auto-detected by array dimensionality — no configuration needed.</p>
+                <p>v0.1.x accepts <code>.mat</code> files (MATLAB / HDF5 format). Keys inside the file are auto-detected by array dimensionality — no configuration needed.</p>
                 <div class="api-table-wrapper">
                     <table class="api-table">
                         <thead><tr><th>File</th><th>Shape</th><th>Description</th></tr></thead>
@@ -438,7 +437,8 @@
                         </tbody>
                     </table>
                 </div>
-                <p style="margin-top: 20px;">Indian Pines is bundled with the package — run <code>ghost demo</code> to get the file paths. For other datasets, see the benchmarks note on the <a href="index.html#benchmarks" style="color: var(--text-primary); text-decoration: underline;">home page</a>.</p>
+                <p style="margin-top: 20px;">Indian Pines is bundled with the package — run <code>ghost demo</code> to get the file paths. For other standard datasets (Indian Pines, Pavia University, Salinas Valley), see the <a href="http://www.ehu.eus/ccwintco/index.php/Hyperspectral_Remote_Sensing_Scenes" target="_blank" style="color: var(--text-primary); text-decoration: underline;">GIC group at UPV/EHU</a>.</p>
+                <p style="margin-top: 12px;">ENVI, GeoTIFF, and HDF5 support is planned for v0.2.x. For now, convert to <code>.mat</code> first.</p>
             </div>
 
         </div>
@@ -446,8 +446,13 @@
 
     <footer>
         <div class="docs-container footer-content">
-            <div class="footer-bottom">
-                <p>Copyright &copy; 2026 GHOST Team &mdash; Proprietary. All Rights Reserved.</p>
+            <div class="footer-authors">
+                <span class="footer-label">Authored by</span>
+                <div class="author-links">
+                    <a href="https://github.com/IshuIsAwake" target="_blank">IshuIsAwake</a>
+                    <span class="author-separator">&bull;</span>
+                    <a href="https://github.com/AnakinSkywalker0" target="_blank">AnakinSkywalker0</a>
+                </div>
             </div>
         </div>
     </footer>

@@ -571,6 +571,7 @@ ghost demo</code></pre>
                 <p>This result is preliminary. The full convex hull continuum removal implementation is not fully optimized — the simpler linear continuum removal currently outperforms it, which suggests the hull computation is introducing noise rather than removing it. That needs to be resolved before any result involving continuum removal can be reported cleanly. GPU utilization is also unoptimized, which makes thorough hyperparameter sweeps expensive and slow.</p>
 
                 <p>The ablation studies have not been completed or documented to a publishable standard. Claiming 92% OA without showing what each component contributes — SPT, continuum removal, dilation rates, ensemble size — is a number without a story. <strong>Those studies are in progress and will be reported in full once they are.</strong> Until then, treat this as a proof of direction, not a finished result: spectral-only classification on Indian Pines is viable, and the per-class consistency suggests the architecture is learning the right thing.</p>
+                <p>I will open source the code only once ghost-hsi v0.2.x has reached a stable release, achieved better numbers and has publishable ablation studies.</p>
             </div>
         </section>
 

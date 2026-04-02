@@ -366,6 +366,26 @@ ghost demo</code></pre>
             </div>
         </section>
 
+        <!-- Why no comparisons ? -->
+        <section id="why-spectral">
+            <h2 class="section-title reveal">Why no comparisions ?</h2>
+            <div class="why-spectral-block reveal">
+                <p>Every published HSI method I'm aware of — including v0.1.x of this project — relies on spatial context. U-Nets, 3D CNNs, hybrid architectures: they all, to varying degrees, learn <em>where</em> things tend to be in a scene alongside <em>what</em> they look like spectrally. That's why they get high numbers on benchmarks. It's also why they don't generalize across scenes.</p>
+                <p>Comparing GHOST v0.1.x against those methods would be comparing like-for-like on a metric that doesn't test the actual thesis. The numbers might look competitive. They'd mean nothing.</p>
+                <p>The comparison that matters is this: <strong>does a spectral-only model, with no access to neighboring pixels at any stage, hold up across scenes it has never seen?</strong> That's the question v0.2.x is trying to answer. That's the benchmark worth publishing. Until that result exists — properly evaluated, with ablation studies, on multi-scene data — putting up a table of same-scene OA scores against the literature would just be adding more noise to a space that already has plenty of it.</p>
+            </div>
+        </section>
+
+        <section id="why-spectral">
+            <h2 class="section-title reveal">Then why publish at all?</h2>
+            <div class="why-spectral-block reveal">
+                <p>Because three of the four things GHOST set out to do are already done.</p>
+                <p>The same binary, unchanged, has segmented an AVIRIS remote sensing scene with 200 spectral bands, a lung cancer histopathology slide with 61 bands, and a Mars CRISM mineral map with ~400 bands. No format-specific code paths. No domain-specific preprocessing. No configuration changes between them. <strong>Data agnosticism, band-count agnosticism, sensor agnosticism — all three work.</strong></p>
+                <p>Most HSI research treats remote sensing and medical imaging as entirely separate problems. GHOST doesn't. That's not nothing, even before cross-scene generalization is solved.</p>
+                <p>The fourth objective — true spectral-only generalization — is the hard one, and it isn't finished. But the foundation it needs is already there.</p>
+            </div>
+        </section>
+
         <!-- Architecture Section -->
         <section id="architecture">
             <h2 class="section-title reveal">Architecture.</h2>

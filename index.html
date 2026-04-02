@@ -560,6 +560,20 @@ ghost demo</code></pre>
             </div>
         </section>
 
+        <!-- What has been achieved so far ? -->
+        <section id="what has been achieved">
+            <h2 class="section-title reveal">What has been achieved so far ?</h2>
+            <div class="why-spectral-block reveal">
+                <p>The incomplete v0.2.x build has been tested on Indian Pines under a strict spectral-only regime — 100 pixels per class for training, with 40% of available pixels used for smaller classes, and <strong>zero spatial context at any point in the pipeline.</strong> The result was 92% OA. No neighbors. No U-Net. No spatial smoothing of any kind.</p>
+
+                <p>That number alone isn't what's interesting. What's interesting is the per-class mIoU distribution. Across nearly all classes, mIoU sits consistently around <strong>0.7 — the model isn't carrying a few easy classes while failing silently on hard ones.</strong> The only meaningful outlier is Class 7 (Grass-pasture-mowed), which has very few labeled pixels in the Indian Pines ground truth to begin with — a data problem, not a model problem. The uniformity across the remaining classes is the first real evidence that the model is learning spectral chemistry rather than spatial habit.</p>
+
+                <p>This result is preliminary. The full convex hull continuum removal implementation is not fully optimized — the simpler linear continuum removal currently outperforms it, which suggests the hull computation is introducing noise rather than removing it. That needs to be resolved before any result involving continuum removal can be reported cleanly. GPU utilization is also unoptimized, which makes thorough hyperparameter sweeps expensive and slow.</p>
+
+                <p>The ablation studies have not been completed or documented to a publishable standard. Claiming 92% OA without showing what each component contributes — SPT, continuum removal, dilation rates, ensemble size — is a number without a story. <strong>Those studies are in progress and will be reported in full once they are.</strong> Until then, treat this as a proof of direction, not a finished result: spectral-only classification on Indian Pines is viable, and the per-class consistency suggests the architecture is learning the right thing.</p>
+            </div>
+        </section>
+
         <!-- Tutorial Section -->
         <section id="tutorial">
             <h2 class="section-title reveal">Start here.</h2>
